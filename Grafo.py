@@ -6,9 +6,9 @@ class Grafo:
 		self.numVertices = 0
 		self.mejorCaminoActual = []
 
-	def agregarVertice(self, etiqueta, distancia=0, heuristica=0):
+	def agregarVertice(self, etiqueta, distancia=0, heuristica=0, posX=0, posY=0):
 		self.numVertices += 1
-		nuevoVertice = Vertice(etiqueta, distancia, heuristica)
+		nuevoVertice = Vertice(etiqueta, distancia, heuristica, posX=posX, posY=posY)
 		self.listaVertices[etiqueta] = nuevoVertice
 		return nuevoVertice
 
@@ -18,6 +18,13 @@ class Grafo:
 		else:
 			return None
 
+	def buscarVertice(self, posX, posY):
+		verticeEncontrado = None
+		for etiqueta in self.listaVertices:
+			if((self.listaVertices[etiqueta].posX == posX) and (self.listaVertices[etiqueta].posY == posY)):
+				verticeEncontrado = self.listaVertices[etiqueta]
+		return verticeEncontrado
+
 	def __contains__(self, etiqueta):
 		return etiqueta in self.listaVertices
 
@@ -25,7 +32,7 @@ class Grafo:
 		if desde not in self.listaVertices:
 			nv = self.agregarVertice(desde)
 		if hasta not in self.listaVertices:
-			nv = self.agregaVertice(hasta)
+			nv = self.agregarVertice(hasta)
 		self.listaVertices[desde].agregarVecino(self.listaVertices[hasta], peso)
 
 	def obtenerVertices(self):

@@ -1,6 +1,8 @@
 class Vertice:
-	def __init__(self, etiqueta, distancia=0, heuristica=0, verticeAnterior=None):
+	def __init__(self, etiqueta, distancia=0, heuristica=0, verticeAnterior=None, posX=0, posY=0):
 		self.etiqueta = etiqueta
+		self.posX = posX
+		self.posY = posY
 		self.distancia = distancia #Utilizada para medir caminos minimos o maximos con Dijkstra
 		self.heuristica = heuristica #Utilizada para medir caminos minimos o maximos con A* o A estrella
 		self.conectadoA = {}
