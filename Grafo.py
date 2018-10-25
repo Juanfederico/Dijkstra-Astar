@@ -1,3 +1,4 @@
+import math
 from Vertice import Vertice
 
 class Grafo:
@@ -100,36 +101,71 @@ class Grafo:
 		self.mostrarMejorCamino()
 
 		#FUNCIONA BIENNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN HAY QUE ARREGLARLO UN POCO
+	def astar(self, verticeComienzo, verticeDestino):
+		verticeIndice = verticeComienzo
+		distanciaTotal = 0 #No recorrio nada al comenzar
+		vecinoMin = None #Va a ser el vecino que contenga el minimo valor de la funcion
+		funcionMin = math.inf() #Inicializada como infinito al comienzo
+		while verticeIndice.obtenerEtiqueta() != verticeDestino.obtenerEtiqueta():
+			for vecino in verticeIndice.obtenerConexiones():
+				if vecino.valorFuncion(verticeIndice, verticeDestino)<funcionMin:
+					funcionMin = vecino.valorFuncion(verticeIndice, verticeDestino)
+					vecinoMin = vecino
+			distanciaTotal = vecinoMin.valorFuncion(verticeIndice, vecinoMin)
+			#Reestableciendo valores para la siguiente iteracion
+			verticeIndice = vecinoMin
+			funcionMin = math.inf()
+
+	def astar2(self, verticeComienzo, verticeDestino):
+		listaAbierta = [verticeComienzo]
+		listaCerrada = []
+		verticeIndice = verticeComienzo
+		#Comienza algoritmo
+		#while(verticeIndice.obtenerEtiqueta()!=verticeDestino.obtenerEtiqueta()):
+		while(verticeDestino not in listaCerrada):
+			print("entro una veeez")
+			listaAbierta.remove(verticeIndice)
+			listaCerrada.append(verticeIndice)
+			if verticeDestino not in listaCerrada:
+				for vecino in verticeIndice.obtenerConexiones():
+					#vecino.setearVerticeAnterior(verticeIndice) #Lo apunto como nodo padre
+					for item in listaAbierta:
+						if(vecino.obtenerEtiqueta()==item.obtenerEtiqueta()):
+							#verticeIndice.valorFuncion(verticeDestino)
+							coste = verticeIndice.setearValorFuncion(verticeDestino) + vecino.setearValorFuncion(verticeDestino)
+							if(item.setearValorFuncion(verticeDestino)>coste):
+								item.setearVerticeAnterior(verticeIndice)
+					if vecino not in listaAbierta and vecino not in listaCerrada:
+						vecino.setearVerticeAnterior(verticeIndice) #Agrego el padre del vertice
+						vecino.setearValorFuncion(verticeDestino) #Calculo el valor de la funcion
+						listaAbierta.append(vecino)
+				verticeIndice = self.obtenerMinimoVertice(listaAbierta, listaCerrada)
+
+		print("terminoooooo")
+		print("Camino de vuelta al comienzo:")
+		verticeIndice = verticeDestino
+		while(verticeIndice.obtenerEtiqueta() != verticeComienzo.obtenerEtiqueta()):
+			print(verticeIndice.obtenerEtiqueta())
+			verticeIndice = verticeIndice.obtenerVerticeAnterior()
+		print(verticeIndice.obtenerEtiqueta()) #El primero
+
+
+	def obtenerMinimoVertice(self, listaVertices, listaRestriccion):
+		verticeMin = None
+		funcionMin = float('inf')
+		contadorVeces = 0
+		for vertice in listaVertices:
+			if(vertice.valorFuncion<funcionMin and vertice not in listaRestriccion):
+				funcionMin = vertice.valorFuncion
+				verticeMin = vertice
+			if contadorVeces>0: 
+				print("Entro mas de 1 vez, valor funcion: " + str(vertice.valorFuncion))
+				print("Valor de funcion minima: " + str(verticeMin.valorFuncion))
+			contadorVeces+=1
+
+		if verticeMin is not None: print("valor: " + str(verticeMin.obtenerEtiqueta()))
+		print("end for--------------")
+		return verticeMin
 
 
 
-
-	"""def dijkstra(self, verticeInicial):
-		verticesRecorridos = []
-		verticesRecorridos.append(verticeInicial)
-		verticesRestantes = self.listaVertices.copy() #Creo una copia del diccionario sobre el que voy a quitar elementos
-		del verticesRestantes[verticeInicial.obtenerEtiqueta()] #Elimino el nodo que se toma como inicial de la lista de pendientes
-		while len(verticesRestantes)!=0:
-			for vertice in verticesRecorridos.values(): #El diccionario auxiliar (sin el nodo inicial)
-				for vecino in vertice.obtenerConexiones():
-					verticesRecorridosAux = verticesRecorridos.copy()
-					distanciaActual = vertice.obtenerDistancia()+vertice.obtenerPeso(vecino) #Suma del total del recorrido (los pesos)
-					if distanciaActual < vecino.obtenerDistancia():
-						vecino.setearDistancia(distanciaActual)
-					verticesRecorridos.update(vecino)
-					#verticesRecorridos[vecino.obtenerEtiqueta()] = vecino
-					print(len(verticesRecorridos))
-
-		print("Vertices recorridos: " + str(len(verticesRecorridos)))
-		for vertice in verticesRecorridos.values():
-			print (vertice.obtenerDistancia())"""
-				
-
-
-
-
-
-#for vecino in verticesRestantes.values():
-#print(str(verticesRestantes.items()))
-#print(self.listaVertices.keys())
-#print(verticesRestantes[vertice].conectadoA[vecino])

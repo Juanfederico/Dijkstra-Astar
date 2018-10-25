@@ -1,7 +1,7 @@
 from Grafo import Grafo
 from Vertice import Vertice
 
-archivo  = open("recorridolaberinto.txt", "r")
+archivo  = open("recorridolaberinto2.txt", "r")
 grafo = Grafo()
 
 print("-------------------------------------------------------------------------------------")
@@ -33,7 +33,8 @@ for i, linea in enumerate(mapa):
 
 print("-------------------------------------------------------------------------------------")
 print("Ejecutando el algoritmo de A estrella")
-print("todavia no implementado..")
+grafo.astar2(grafo.obtenerVertice(verticePacman), grafo.obtenerVertice(verticeComida))
+
 
 print("pruebas-----------------------------------------------------------------")
 for vertice in grafo.listaVertices:

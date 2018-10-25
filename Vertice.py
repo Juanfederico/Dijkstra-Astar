@@ -6,6 +6,7 @@ class Vertice:
 		self.distancia = distancia #Utilizada para medir caminos minimos o maximos con Dijkstra
 		self.heuristica = heuristica #Utilizada para medir caminos minimos o maximos con A* o A estrella
 		self.conectadoA = {}
+		self.valorFuncion = 0 #Para persistir en a* (contiene la suma del peso con la heuristica determinada, default 0)
 		#Variables para recorridos como dijkstra o a*
 		self.verticeAnterior = verticeAnterior #El anterior en el recorrido minimo/maximo con dijkstra o a*
 
@@ -24,6 +25,12 @@ class Vertice:
 	def obtenerEtiqueta(self):
 		return self.etiqueta
 
+	def obtenerX(self):
+		return self.posX
+
+	def obtenerY(self):
+		return self.posY
+
 	def obtenerDistancia(self):
 		return self.distancia
 
@@ -36,8 +43,20 @@ class Vertice:
 	def setearVerticeAnterior(self, verticeAnterior):
 		self.verticeAnterior = verticeAnterior
 
+	def setearHeuristica(self, verticeDestino=0):
+		self.heuristica = abs(verticeDestino.obtenerX()-self.obtenerX()) + abs(verticeDestino.obtenerY()-self.obtenerY())
+
 	def obtenerHeuristica(self):
 		return self.heuristica
 
 	def obtenerPeso(self,vecino):
 		return self.conectadoA[vecino]
+
+	def setearValorFuncion(self, verticeDestino): #verticeAnterior es del cual viene en el recorrido; verticeDestino es con el que finaliza el algoritmo
+		self.setearHeuristica(verticeDestino) #Generamos la heuristica segun el criterio que hayamos definido en el problema
+		if self.obtenerVerticeAnterior() is not None:
+			self.valorFuncion = self.obtenerPeso(self.obtenerVerticeAnterior())+self.obtenerHeuristica() #La sumamos al peso de verticeAnterior a verticeActual(self)
+			return self.valorFuncion
+		else:
+			self.valorFuncion = self.obtenerHeuristica()
+			return self.valorFuncion
