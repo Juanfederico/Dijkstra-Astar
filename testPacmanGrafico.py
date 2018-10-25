@@ -1,3 +1,6 @@
+import os
+import time
+import numpy as np
 from Grafo import Grafo
 from Vertice import Vertice
 
@@ -41,25 +44,38 @@ print("Ejecutando el algoritmo de A estrella:")
 grafo.astar(grafo.obtenerVertice(verticePacman), grafo.obtenerVertice(verticeComida))
 print("-------------------------------------------------------------------------------------")
 print("Buscando la distancia total del camino:")
-grafo.mostrarMejorCaminoAstar(grafo.obtenerVertice(verticePacman), grafo.obtenerVertice(verticeComida))
+listaCamino = grafo.mostrarMejorCaminoAstar(grafo.obtenerVertice(verticePacman), grafo.obtenerVertice(verticeComida))
 
 
-"""print("pruebas-----------------------------------------------------------------")
-for vertice in grafo.listaVertices:
-	verticeIndex = grafo.listaVertices[vertice]
-	for vecino in verticeIndex.obtenerConexiones():
-		print("vertice: " + str(verticeIndex.obtenerEtiqueta()))
-		print("vecino: " + str(vecino.obtenerEtiqueta()))
-		print("-----------------------")"""
+archivoaux = open("recorridopacman.txt", "r")
+mapa = archivoaux.readlines()
 
-"""print("pruebas2-----------------------------------------------------------------")
-for vertice in grafo.listaVertices:
-	print(vertice)
+verticeOrigen = grafo.obtenerVertice(verticePacman)
+verticeDestino = grafo.obtenerVertice(verticeComida)
+caracterPacman = False
+caracterInicio = False
+contadorDistancia = 0
 
-print("vertices importantes--------------------------------------------------")
-print("pacman:")
-print(grafo.obtenerVertice(verticePacman).posX)
-print(grafo.obtenerVertice(verticePacman).posY)
-print("comida:")
-print(grafo.obtenerVertice(verticeComida).posX)
-print(grafo.obtenerVertice(verticeComida).posY)"""
+for elemento in listaCamino:
+	os.system('cls')
+	vertice = grafo.obtenerVertice(elemento)
+	#print(mapa[vertice.obtenerY()][vertice.obtenerX()])
+	for i, linea in enumerate(mapa):
+		for j, caracter in enumerate(linea):
+			if vertice.obtenerX()==j and vertice.obtenerY()==i:
+				caracterPacman = True
+			if verticeOrigen.obtenerX()==j and verticeOrigen.obtenerY()==i:
+				caracterInicio = True
+		if caracterInicio and caracterPacman:
+			if verticeOrigen.obtenerX()>vertice.obtenerX():
+				print(str(linea[0:vertice.obtenerX()]) + 'P' + str(linea[vertice.obtenerX()+1:verticeOrigen.obtenerX()]) + '-' + str(linea[verticeOrigen.obtenerX()+1:len(linea)-1]))
+			else:
+				print(str(linea[0:verticeOrigen.obtenerX()]) + '-' + str(linea[verticeOrigen.obtenerX()+1:vertice.obtenerX()]) + 'P' + str(linea[vertice.obtenerX()+1:len(linea)-1]))
+		elif caracterInicio and not caracterPacman: print(str(linea[0:verticeOrigen.obtenerX()]) + '-' + str(linea[verticeOrigen.obtenerX()+1:len(linea)-1]))
+		elif caracterPacman: print(str(linea[0:vertice.obtenerX()]) + 'P' + str(linea[vertice.obtenerX()+1:len(linea)-1]))
+		else: print(linea[0:len(linea)-1])
+		caracterPacman = False
+		caracterInicio = False
+	print("Distancia: " + str(contadorDistancia))
+	contadorDistancia+=1
+	time.sleep(0.01)

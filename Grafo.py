@@ -101,29 +101,14 @@ class Grafo:
 		self.mostrarMejorCamino()
 
 		#FUNCIONA BIENNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN HAY QUE ARREGLARLO UN POCO
-	def astar(self, verticeComienzo, verticeDestino):
-		verticeIndice = verticeComienzo
-		distanciaTotal = 0 #No recorrio nada al comenzar
-		vecinoMin = None #Va a ser el vecino que contenga el minimo valor de la funcion
-		funcionMin = math.inf() #Inicializada como infinito al comienzo
-		while verticeIndice.obtenerEtiqueta() != verticeDestino.obtenerEtiqueta():
-			for vecino in verticeIndice.obtenerConexiones():
-				if vecino.valorFuncion(verticeIndice, verticeDestino)<funcionMin:
-					funcionMin = vecino.valorFuncion(verticeIndice, verticeDestino)
-					vecinoMin = vecino
-			distanciaTotal = vecinoMin.valorFuncion(verticeIndice, vecinoMin)
-			#Reestableciendo valores para la siguiente iteracion
-			verticeIndice = vecinoMin
-			funcionMin = math.inf()
 
-	def astar2(self, verticeComienzo, verticeDestino):
+	def astar(self, verticeComienzo, verticeDestino):
 		listaAbierta = [verticeComienzo]
 		listaCerrada = []
 		verticeIndice = verticeComienzo
 		#Comienza algoritmo
 		#while(verticeIndice.obtenerEtiqueta()!=verticeDestino.obtenerEtiqueta()):
 		while(verticeDestino not in listaCerrada):
-			print("entro una veeez")
 			listaAbierta.remove(verticeIndice)
 			listaCerrada.append(verticeIndice)
 			if verticeDestino not in listaCerrada:
@@ -141,14 +126,16 @@ class Grafo:
 						listaAbierta.append(vecino)
 				verticeIndice = self.obtenerMinimoVertice(listaAbierta, listaCerrada)
 
-		print("terminoooooo")
-		print("Camino de vuelta al comienzo:")
+	def mostrarMejorCaminoAstar(self, verticeOrigen, verticeDestino):
+		listaCamino = [] #Lista ordenada del camino hacia el destino
 		verticeIndice = verticeDestino
-		while(verticeIndice.obtenerEtiqueta() != verticeComienzo.obtenerEtiqueta()):
-			print(verticeIndice.obtenerEtiqueta())
+		contadorCamino = 0
+		while(verticeOrigen.obtenerEtiqueta() not in listaCamino):
+			listaCamino.insert(0, verticeIndice.obtenerEtiqueta())
+			contadorCamino += 1
 			verticeIndice = verticeIndice.obtenerVerticeAnterior()
-		print(verticeIndice.obtenerEtiqueta()) #El primero
-
+		print("Distancia total: " + str(len(listaCamino)-1)) #-1 Porque no se cuenta desde donde arranca (la lista incluye al elemento inicial)
+		return listaCamino
 
 	def obtenerMinimoVertice(self, listaVertices, listaRestriccion):
 		verticeMin = None
@@ -159,12 +146,12 @@ class Grafo:
 				funcionMin = vertice.valorFuncion
 				verticeMin = vertice
 			if contadorVeces>0: 
-				print("Entro mas de 1 vez, valor funcion: " + str(vertice.valorFuncion))
-				print("Valor de funcion minima: " + str(verticeMin.valorFuncion))
+				None
+				#print("Entro mas de 1 vez, valor funcion: " + str(vertice.valorFuncion))
+				#print("Valor de funcion minima: " + str(verticeMin.valorFuncion))
 			contadorVeces+=1
-
-		if verticeMin is not None: print("valor: " + str(verticeMin.obtenerEtiqueta()))
-		print("end for--------------")
+		#if verticeMin is not None: print("valor: " + str(verticeMin.obtenerEtiqueta()))
+		#print("end for--------------")
 		return verticeMin
 
 
