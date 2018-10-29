@@ -24,7 +24,7 @@ mapa = archivo.readlines() #Paso el contenido del archivo a una lista de lineas 
 for i, linea in enumerate(mapa):
 	for j, caracter in enumerate(linea):
 		if(caracter==simboloCamino or caracter.lower()==simboloPacman.lower() or caracter.lower()==simboloComida.lower()): #No es pared (camino, pacman o comida)
-			grafo.agregarVertice(numeroVertice, 1, posX=j, posY=i) #j representa a la dimension X, i a la dimension Y, el 1 es la distancia
+			grafo.agregarVertice(numeroVertice, distancia=99999, posX=j, posY=i) #j representa a la dimension X, i a la dimension Y, el 1 es la distancia
 			vecinoBuscadoH = grafo.buscarVertice(j-1, i) #Vecino horizontal izquierdo
 			if vecinoBuscadoH is not None:
 				grafo.agregarArista(numeroVertice, vecinoBuscadoH.obtenerEtiqueta(), 1)
@@ -40,43 +40,13 @@ for i, linea in enumerate(mapa):
 			numeroVertice+=1
 
 print("-------------------------------------------------------------------------------------")
-print("Ejecutando el algoritmo de A estrella:")
-grafo.astar(grafo.obtenerVertice(verticePacman), grafo.obtenerVertice(verticeComida))
+print("Ejecutando el algoritmo de Dijkstra:")
+verticeInicial = grafo.obtenerVertice(verticePacman)
+verticeFinal = grafo.obtenerVertice(verticeComida)
+grafo.dijkstra(verticeInicial) #Se envia el vertice inicial como parametro
+
 print("-------------------------------------------------------------------------------------")
 print("Buscando la distancia total del camino:")
-listaCamino = grafo.mostrarMejorCaminoAstar(grafo.obtenerVertice(verticePacman), grafo.obtenerVertice(verticeComida))
-
-
-archivoaux = open("recorridopacman.txt", "r")
-mapa = archivoaux.readlines()
-
-verticeOrigen = grafo.obtenerVertice(verticePacman)
-verticeDestino = grafo.obtenerVertice(verticeComida)
-caracterPacman = False
-caracterInicio = False
-contadorDistancia = 0
-
-for elemento in listaCamino:
-	os.system('cls')
-	vertice = grafo.obtenerVertice(elemento)
-	#print(mapa[vertice.obtenerY()][vertice.obtenerX()])
-	for i, linea in enumerate(mapa):
-		for j, caracter in enumerate(linea):
-			if vertice.obtenerX()==j and vertice.obtenerY()==i:
-				caracterPacman = True
-			if verticeOrigen.obtenerX()==j and verticeOrigen.obtenerY()==i:
-				caracterInicio = True
-		if caracterInicio and caracterPacman:
-			if verticeOrigen.obtenerX()>vertice.obtenerX():
-				print(str(linea[0:vertice.obtenerX()]) + 'P' + str(linea[vertice.obtenerX()+1:verticeOrigen.obtenerX()]) + '-' + str(linea[verticeOrigen.obtenerX()+1:len(linea)-1]))
-			else:
-				print(str(linea[0:verticeOrigen.obtenerX()]) + '-' + str(linea[verticeOrigen.obtenerX()+1:vertice.obtenerX()]) + 'P' + str(linea[vertice.obtenerX()+1:len(linea)-1]))
-		elif caracterInicio and not caracterPacman: print(str(linea[0:verticeOrigen.obtenerX()]) + '-' + str(linea[verticeOrigen.obtenerX()+1:len(linea)-1]))
-		elif caracterPacman: print(str(linea[0:vertice.obtenerX()]) + 'P' + str(linea[vertice.obtenerX()+1:len(linea)-1]))
-		else: 
-			print(linea[0:len(linea)-1])
-		caracterPacman = False
-		caracterInicio = False
-	print("Distancia: " + str(contadorDistancia))
-	contadorDistancia+=1
-	time.sleep(0.035)
+print(verticeInicial.obtenerVerticeAnterior().obtenerEtiqueta())
+grafo.obtenerMejorCamino(verticeInicial, verticeFinal)
+grafo.mostrarMejorCamino()

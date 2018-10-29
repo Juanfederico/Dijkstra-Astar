@@ -95,10 +95,10 @@ class Grafo:
 			print("Etiqueta: " + str(self.listaVertices[vertice].obtenerEtiqueta()))
 			print("Distancia: " + str(self.listaVertices[vertice].obtenerDistancia()))
 
-		verticeFinal = self.obtenerVertice(6)
-		self.obtenerMejorCamino(verticeInicial, verticeFinal)
-		print("camino-------------------------------------------------------------------------------------")
-		self.mostrarMejorCamino()
+		#verticeFinal = self.obtenerVertice(6)
+		#self.obtenerMejorCamino(verticeInicial, verticeFinal)
+		#print("camino-------------------------------------------------------------------------------------")
+		#self.mostrarMejorCamino()
 
 		#FUNCIONA BIENNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN HAY QUE ARREGLARLO UN POCO
 
