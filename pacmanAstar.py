@@ -38,7 +38,7 @@ for i, linea in enumerate(mapa):
 			elif(caracter.lower()==simboloComida.lower()):
 				verticeComida = numeroVertice
 			numeroVertice+=1
-
+print("Listo")
 print("-------------------------------------------------------------------------------------")
 print("Ejecutando el algoritmo de A estrella:")
 grafo.astar(grafo.obtenerVertice(verticePacman), grafo.obtenerVertice(verticeComida))
@@ -55,6 +55,9 @@ verticeDestino = grafo.obtenerVertice(verticeComida)
 caracterPacman = False
 caracterInicio = False
 contadorDistancia = 0
+
+print("\n\nPresione ENTER para ver el recorrido graficamente")
+input()
 
 for elemento in listaCamino:
 	os.system('cls')

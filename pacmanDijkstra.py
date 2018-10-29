@@ -43,10 +43,11 @@ print("-------------------------------------------------------------------------
 print("Ejecutando el algoritmo de Dijkstra:")
 verticeInicial = grafo.obtenerVertice(verticePacman)
 verticeFinal = grafo.obtenerVertice(verticeComida)
+#verticeFinal = grafo.buscarVertice(31,35)
+#verticeFinal = grafo.buscarVertice(29,35)
+verticeInicial.distancia = 0
 grafo.dijkstra(verticeInicial) #Se envia el vertice inicial como parametro
-
 print("-------------------------------------------------------------------------------------")
 print("Buscando la distancia total del camino:")
-print(verticeInicial.obtenerVerticeAnterior().obtenerEtiqueta())
 grafo.obtenerMejorCamino(verticeInicial, verticeFinal)
 grafo.mostrarMejorCamino()

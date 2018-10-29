@@ -65,42 +65,27 @@ class Grafo:
 
 	def dijkstra(self, verticeInicial):
 		verticeIndice = verticeInicial
-		verticesRecorridos = {}
+		listaPrioridad = [] #Se agregan por prioridad los vecinos de los nodos analizados; es una pila (FIFO)
 		verticesRestantes = self.listaVertices.copy() #Creo una copia del diccionario sobre el que voy a quitar elementos
 		#del verticesRestantes[verticeInicial.obtenerEtiqueta()] #Elimino el nodo que se toma como inicial de la lista de pendientes
 		primerVecinoIterado = None #Por defecto
-		iterado = False #Por defecto
-
 		while len(verticesRestantes)!=0:
 			for vecino in verticeIndice.obtenerConexiones(): #El diccionario auxiliar (sin el nodo inicial)
-				#print(vecino)
-				#print(verticesRecorridos.keys())
-				if ((not iterado) and (vecino.obtenerEtiqueta() not in verticesRecorridos)):
-					primerVecinoIterado = vecino
-					iterado = True
+				if (vecino.obtenerEtiqueta() in verticesRestantes):
+					listaPrioridad.insert(0, vecino)
 				distanciaActual = verticeIndice.obtenerDistancia()+verticeIndice.obtenerPeso(vecino) #Suma del total del recorrido (los pesos)
 				if distanciaActual < vecino.obtenerDistancia():
 					vecino.setearDistancia(distanciaActual)
 					vecino.setearVerticeAnterior(verticeIndice) #Dejando una referencia del min/max anterior para saber el camino
-			if(iterado==True):
-				verticesRecorridos[verticeIndice.obtenerEtiqueta()] = verticeIndice
-				del verticesRestantes[verticeIndice.obtenerEtiqueta()]
-				verticeIndice = primerVecinoIterado
-			else: break
-			iterado = False
-			#print(verticeIndice.obtenerEtiqueta())
-			#print(len(verticesRestantes))
-		print("mostrando-----------------------------------------------------------------------------------")
-		for vertice in self.obtenerVertices():
-			print("Etiqueta: " + str(self.listaVertices[vertice].obtenerEtiqueta()))
-			print("Distancia: " + str(self.listaVertices[vertice].obtenerDistancia()))
-
-		#verticeFinal = self.obtenerVertice(6)
-		#self.obtenerMejorCamino(verticeInicial, verticeFinal)
-		#print("camino-------------------------------------------------------------------------------------")
-		#self.mostrarMejorCamino()
-
-		#FUNCIONA BIENNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN HAY QUE ARREGLARLO UN POCO
+			if(verticeIndice.obtenerEtiqueta() in verticesRestantes): del verticesRestantes[verticeIndice.obtenerEtiqueta()]
+			if(len(listaPrioridad)!=0): 
+				verticeIndice = listaPrioridad[0]
+				del listaPrioridad[0]
+		print("Fin de la ejecucion")
+		#print("mostrando-----------------------------------------------------------------------------------")
+		#for vertice in self.obtenerVertices():
+		#	print("Etiqueta: " + str(self.listaVertices[vertice].obtenerEtiqueta()))
+		#	print("Distancia: " + str(self.listaVertices[vertice].obtenerDistancia()))
 
 	def astar(self, verticeComienzo, verticeDestino):
 		listaAbierta = [verticeComienzo]
@@ -125,6 +110,7 @@ class Grafo:
 						vecino.setearValorFuncion(verticeDestino) #Calculo el valor de la funcion
 						listaAbierta.append(vecino)
 				verticeIndice = self.obtenerMinimoVertice(listaAbierta, listaCerrada)
+		print("Fin de la ejecucion")
 
 	def mostrarMejorCaminoAstar(self, verticeOrigen, verticeDestino):
 		listaCamino = [] #Lista ordenada del camino hacia el destino
